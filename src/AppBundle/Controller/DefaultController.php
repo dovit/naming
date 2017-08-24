@@ -4,18 +4,28 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Swagger\Annotations as SWG;
 
+/**
+ * @SWG\Swagger(
+ *     basePath="/app_dev.php"
+ * )
+ *
+ * @SWG\Info(
+ *     title="Naming api",
+ *     version="0.1",
+ * )
+ */
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/swagger.json", name="documentation")
      */
-    public function indexAction(Request $request)
+    public function documentationAction()
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $swagger = \Swagger\scan($this->get('kernel')->getRootDir() . '/../src');
+        return new JsonResponse($swagger);
     }
 }
