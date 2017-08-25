@@ -3,7 +3,7 @@ naming-mysql:
   container_name: naming-mysql
   environment:
     - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=ftv
+    - MYSQL_DATABASE=naming
     - MYSQL_USER=root
     - MYSQL_PASSWORD=root
 
