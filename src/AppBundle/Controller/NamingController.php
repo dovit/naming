@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Occurrence;
+use AppBundle\Entity\OccurrenceDictionary;
 use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -12,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Swagger\Annotations as SWG;
 use FOS\HttpCacheBundle\Http\SymfonyResponseTagger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  *
@@ -40,7 +43,7 @@ class NamingController extends FOSRestController
      *
      * @View()
      *
-     * @Route("/naming", name="naming")
+     * @Route("/naming/{dictionary}/", name="naming")
      *
      * @Method({"GET"})
      *
@@ -71,5 +74,37 @@ class NamingController extends FOSRestController
     public function getDictionaryAction()
     {
         return $this->handleView($this->view(['test' => 2], Response::HTTP_OK));
+    }
+
+    /**
+     * @SWG\Post(
+     *     description="Generate stats",
+     *     path="/naming",
+     *     tags={"naming"},
+     *     @SWG\Response(
+     *          response="200",
+     *          description="Test"
+     *      )
+     * )
+     *
+     * @View()
+     *
+     * @Route("/naming", name="naming_generate_occurrence")
+     *
+     * @Method({"POST"})
+     */
+    public function generateTableOccurrenceAction()
+    {
+        $words = ['test', 'table', 'tableau', 'test'];
+
+        $occurrenceDictionary = new OccurrenceDictionary();
+        $occurrenceDictionary->setDictionary(1);
+
+        foreach ($words as $word)
+        {
+            $this->get('naming')->processWord($occurrenceDictionary, $word);
+        }
+
+        return $this->handleView($this->view($occurrenceDictionary, Response::HTTP_OK));
     }
 }

@@ -1,0 +1,4 @@
+services:
+#    dvc_dictionary_consumer.example:
+#        class: Dvc\DictionaryConsumerBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -1,3 +1,7 @@
+dvc_dictionary_consumer:
+    resource: "@DvcDictionaryConsumerBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
