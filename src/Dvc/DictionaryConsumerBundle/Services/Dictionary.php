@@ -4,14 +4,17 @@ namespace Dvc\DictionaryConsumerBundle\Services;
 
 class Dictionary
 {
-    public function get()
-    {
-        $res = [];
+    private $clientGuzzleDictionary;
 
-        $dictionary = new \Dvc\DictionaryConsumerBundle\Entity\Dictionary();
-        $dictionary->setCode('fr');
-        $dictionary->setId(1);
-        $res[] = $dictionary;
-        return $res;
+    public function __construct($clientGuzzleDictionary)
+    {
+        $this->clientGuzzleDictionary = $clientGuzzleDictionary;
+    }
+
+    public function getWords($dictionary)
+    {
+        return $this->clientGuzzleDictionary
+                        ->get('dictionaries/' . $dictionary . '/words/')
+                        ->getBody();
     }
 }
