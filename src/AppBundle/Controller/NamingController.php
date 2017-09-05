@@ -73,7 +73,21 @@ class NamingController extends FOSRestController
      */
     public function getDictionaryAction()
     {
-        return $this->handleView($this->view(['test' => 2], Response::HTTP_OK));
+        $service = $this->get('dictionary');
+
+        $occurrenceDictionary = new OccurrenceDictionary();
+        $occurrenceDictionary->setDictionary(87);
+
+        $words = json_decode($service->getWords(87), true);
+
+        foreach ($words as $word)
+        {
+            if (!is_null($word['word']) && $word['word'] !== "") {
+                $this->get('naming')->processWord($occurrenceDictionary, utf8_decode($word['word']));
+            }
+        }
+
+        return $this->handleView($this->view($occurrenceDictionary, Response::HTTP_OK));
     }
 
     /**
