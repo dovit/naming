@@ -78,7 +78,7 @@ class NamingController extends FOSRestController
         $occurrenceDictionary = new OccurrenceDictionary();
         $occurrenceDictionary->setDictionary(87);
 
-        $words = json_decode($service->getWords(87), true);
+        $words = json_decode($service->getWords(87, 2), true);
 
         foreach ($words as $word)
         {
