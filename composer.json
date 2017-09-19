@@ -30,7 +30,8 @@
         "friendsofsymfony/http-cache-bundle": "^2.1",
         "guzzlehttp/psr7": "^1.4",
         "php-http/guzzle6-adapter": "^1.1",
-        "eightpoints/guzzle-bundle": "^6.0"
+        "eightpoints/guzzle-bundle": "^6.0",
+        "php-amqplib/rabbitmq-bundle": "^1.12"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

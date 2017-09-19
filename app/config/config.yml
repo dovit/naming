@@ -107,3 +107,23 @@ guzzle:
             base_url: "http://dictionary-webserver:8080/app_dev.php/"
             headers:
                 Accept: "application/json"
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host: "%rabbitmq_host%"
+            port: "%rabbitmq_port%"
+            user: "%rabbitmq_user%"
+            password: "%rabbitmq_password%"
+            vhost: /
+    consumers:
+        word_created:
+            connection: default
+            exchange_options:
+                name: 'dictionary-exchange'
+                type: fanout
+            queue_options:
+                name: 'naming-word-created'
+                routing_keys:
+                  - 'dictionary.word_created'
+            callback: naming.consumer.word_created

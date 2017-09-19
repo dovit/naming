@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new FOS\HttpCacheBundle\FOSHttpCacheBundle(),
             new Dvc\DictionaryConsumerBundle\DvcDictionaryConsumerBundle(),
             new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
+            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
