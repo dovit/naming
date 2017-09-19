@@ -28,7 +28,7 @@ services:
       - naming-php-fpm
 
   naming-php-fpm:
-    build: php-fpm/Dockerfile
+    build: ./php-fpm/
     container_name: naming-php-fpm
     volumes:
       - ../:/var/www/naming
