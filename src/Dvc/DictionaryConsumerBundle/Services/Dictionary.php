@@ -30,10 +30,7 @@ class Dictionary
             $page++;
         } while ($page < $cnt);
 
-
-        dump($res);
-        dump($response->getHeaders()['X-page-count'][0]);
-        exit;
+        return $res;
     }
 
     public function getWordsByPage($dictionary, $page)
