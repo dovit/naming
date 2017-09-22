@@ -41,7 +41,10 @@ class Dictionary
         return $this->clientGuzzleDictionary
             ->get('dictionaries/' . $dictionary . '/words/',
                 [
-                    'headers' => ['X-page' => $page]
+                    'headers' => [
+                                    'X-page' => $page,
+                                    'Authorization' => 'Bearer: +65'
+                                ]
                 ]);
     }
 }
