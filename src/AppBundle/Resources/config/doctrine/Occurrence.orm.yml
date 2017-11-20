@@ -1,0 +1,27 @@
+AppBundle\Entity\Occurrence:
+    type: entity
+    repositoryClass: AppBundle\Repository\OccurrenceRepository
+    id:
+        id:
+            type: string
+            id: true
+            column: id
+            generator:
+              strategy: UUID
+    fields:
+        value:
+            type: float
+            column: value
+            nullable: false
+        letter:
+            type: integer
+            column: letter
+            nullable: false
+        nextLetter:
+            type: integer
+            column: next_letter
+            nullable: false
+    manyToOne:
+        dictionary:
+            targetEntity: OccurrenceDictionary
+            inversedBy: occurrences

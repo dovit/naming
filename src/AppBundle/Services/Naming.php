@@ -4,40 +4,41 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\Occurrence;
 use AppBundle\Entity\OccurrenceDictionary;
+use AppBundle\Entity\Word;
 use Doctrine\Common\Collections\Criteria;
 
 class Naming
 {
     /**
-     *
      * @param OccurrenceDictionary $occurrenceDictionary
-     * @param string $word
+     * @param Word $word
      * @return bool
      */
-    public function processWord(OccurrenceDictionary $occurrenceDictionary, string $word)
+    public function processWord(OccurrenceDictionary $occurrenceDictionary, Word $word): bool
     {
         $cnt = 0;
 
         // Search if word already processed
-        if ($occurrenceDictionary->getWords()->contains($word))
+        if ($occurrenceDictionary->getWords()->exists(function ($key, $element) use ($word) {
+            return $word->getWord() === $element->getWord();} ))
         {
             return true;
         }
 
-        $occurrenceDictionary->getWords()->add(utf8_encode($word));
-        $word = str_split($word);
+        $wordArray = str_split($word->getWord());
 
-        while ($cnt < (count($word) - 1))
+        while ($cnt < (count($wordArray) - 1))
         {
             $criteria = Criteria::create()
-                ->where(Criteria::expr()->eq("letter", \IntlChar::ord($word[$cnt])))
-                ->andWhere(Criteria::expr()->eq("nextLetter", \IntlChar::ord($word[$cnt + 1])))
+                ->where(Criteria::expr()->eq('letter', \IntlChar::ord($wordArray[$cnt])))
+                ->andWhere(Criteria::expr()->eq('nextLetter', \IntlChar::ord($wordArray[$cnt + 1])))
             ;
             $occurrence = $occurrenceDictionary->getOccurrences()->matching($criteria);
-            if ($occurrence->count() == 0 && isset($word[$cnt + 1]) && !is_null($word[$cnt + 1])) {
+            if (isset($wordArray[1 + $cnt]) && null !== $wordArray[$cnt + 1] && $occurrence->count() === 0) {
                 $tmp = new Occurrence();
-                $tmp->setLetter(\IntlChar::ord(utf8_encode($word[$cnt])));
-                $tmp->setNextLetter(\IntlChar::ord(utf8_encode($word[$cnt + 1])));
+                $tmp->setDictionary($occurrenceDictionary);
+                $tmp->setLetter(\IntlChar::ord(utf8_encode($wordArray[$cnt])));
+                $tmp->setNextLetter(\IntlChar::ord(utf8_encode($wordArray[$cnt + 1])));
                 $tmp->setValue(1);
                 $occurrenceDictionary->getOccurrences()->add($tmp);
             }
@@ -47,6 +48,12 @@ class Naming
             }
             $cnt++;
         }
+        $occurrenceDictionary->getWords()->add($word);
         return true;
+    }
+
+    public function deleteWord()
+    {
+
     }
 }

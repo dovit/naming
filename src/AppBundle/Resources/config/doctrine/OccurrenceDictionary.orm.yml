@@ -1,0 +1,28 @@
+AppBundle\Entity\OccurrenceDictionary:
+    type: entity
+    repositoryClass: AppBundle\Repository\OccurrenceDictionaryRepository
+    id:
+        id:
+            type: string
+            id: true
+            column: id
+            generator:
+              strategy: UUID
+    fields:
+        dictionaryCode:
+            type: string
+            column: dictionary_code
+            nullable: false
+    oneToMany:
+        occurrences:
+            targetEntity: Occurrence
+            mappedBy: dictionary
+            cascade: ["persist", "remove"]
+        words:
+            targetEntity: Word
+            mappedBy: dictionary
+            cascade: ["persist", "remove"]
+            joinColumn:
+              name: dictionary_id
+              referencedColumnName: id
+              onDelete: CASCADE

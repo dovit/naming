@@ -10,16 +10,13 @@ class Word
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $word;
+    protected $word;
 
-    /**
-     *
-     */
     protected $dictionary;
 
     /**

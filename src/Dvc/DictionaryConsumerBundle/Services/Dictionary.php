@@ -25,7 +25,7 @@ class Dictionary
         do
         {
             $response = $this->getWordsByPage($dictionary, $page);
-            $res = array_merge($res, json_decode($response->getBody(), true));
+            $res = array_merge(json_decode($response->getBody(), true), $res);
             $cnt = $response->getHeaders()['X-page-count'][0];
             $page++;
         } while ($page < $cnt);

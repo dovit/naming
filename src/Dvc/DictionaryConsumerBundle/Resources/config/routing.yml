@@ -1,3 +1,0 @@
-dvc_dictionary_consumer_homepage:
-    path:     /
-    defaults: { _controller: DvcDictionaryConsumerBundle:Default:index }

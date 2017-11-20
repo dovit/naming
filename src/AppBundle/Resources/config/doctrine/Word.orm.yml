@@ -1,0 +1,22 @@
+AppBundle\Entity\Word:
+    type: entity
+    repositoryClass: AppBundle\Repository\WordRepository
+    id:
+        id:
+            type: string
+            id: true
+            column: id
+            generator:
+              strategy: UUID
+    fields:
+        word:
+            type: string
+            column: word
+            nullable: true
+    manyToOne:
+      dictionary:
+        targetEntity: OccurrenceDictionary
+        inversedBy: words
+        joinColumn:
+          name: dictionary_id
+          referencedColumnName: id

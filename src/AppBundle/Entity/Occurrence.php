@@ -43,6 +43,14 @@ class Occurrence
     private $nextLetter;
 
     /**
+     * @var OccurrenceDictionary
+     *
+     * @ORM\ManyToOne(targetEntity="OccurrenceDictionary", inversedBy="occurrences")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $dictionary;
+
+    /**
      * Get id
      *
      * @return int
@@ -106,5 +114,21 @@ class Occurrence
     public function setNextLetter(int $nextLetter)
     {
         $this->nextLetter = $nextLetter;
+    }
+
+    /**
+     * @return OccurrenceDictionary
+     */
+    public function getDictionary(): OccurrenceDictionary
+    {
+        return $this->dictionary;
+    }
+
+    /**
+     * @param OccurrenceDictionary $dictionary
+     */
+    public function setDictionary(OccurrenceDictionary $dictionary)
+    {
+        $this->dictionary = $dictionary;
     }
 }

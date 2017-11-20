@@ -3,16 +3,21 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * OccurrenceDictionary
+ */
 class OccurrenceDictionary
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="dictionary", type="integer")
      */
-    private $dictionary;
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $dictionaryCode;
 
     /**
      * @var ArrayCollection
@@ -31,25 +36,9 @@ class OccurrenceDictionary
     }
 
     /**
-     * @return int
-     */
-    public function getDictionary(): int
-    {
-        return $this->dictionary;
-    }
-
-    /**
-     * @param int $dictionary
-     */
-    public function setDictionary(int $dictionary)
-    {
-        $this->dictionary = $dictionary;
-    }
-
-    /**
      * @return ArrayCollection
      */
-    public function getOccurrences(): ArrayCollection
+    public function getOccurrences()
     {
         return $this->occurrences;
     }
@@ -65,7 +54,7 @@ class OccurrenceDictionary
     /**
      * @return ArrayCollection
      */
-    public function getWords(): ArrayCollection
+    public function getWords()
     {
         return $this->words;
     }
@@ -76,5 +65,37 @@ class OccurrenceDictionary
     public function setWords(ArrayCollection $words)
     {
         $this->words = $words;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDictionaryCode(): string
+    {
+        return $this->dictionaryCode;
+    }
+
+    /**
+     * @param string $dictionaryCode
+     */
+    public function setDictionaryCode(string $dictionaryCode)
+    {
+        $this->dictionaryCode = $dictionaryCode;
     }
 }
