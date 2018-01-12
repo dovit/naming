@@ -3,21 +3,35 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Swagger\Annotations as SWG;
 
 /**
  * OccurrenceDictionary
+ *
+ * @SWG\Definition(
+ *     definition="OccurrenceDictionary",
+ *     required={"dictionaryCode"},
+ *     type="object"
+ * )
  */
 class OccurrenceDictionary
 {
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
     /**
      * @var string
+     *
+     * @SWG\Property(property="dictionary_code", example="DICTIONARY-FR0001")
      */
     private $dictionaryCode;
+
+    /**
+     * @var string
+     */
+    private $dictionaryId;
 
     /**
      * @var ArrayCollection
@@ -68,17 +82,17 @@ class OccurrenceDictionary
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId(int $id)
+    public function setId(string $id)
     {
         $this->id = $id;
     }
@@ -97,5 +111,21 @@ class OccurrenceDictionary
     public function setDictionaryCode(string $dictionaryCode)
     {
         $this->dictionaryCode = $dictionaryCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDictionaryId(): string
+    {
+        return $this->dictionaryId;
+    }
+
+    /**
+     * @param string $dictionaryId
+     */
+    public function setDictionaryId(string $dictionaryId)
+    {
+        $this->dictionaryId = $dictionaryId;
     }
 }

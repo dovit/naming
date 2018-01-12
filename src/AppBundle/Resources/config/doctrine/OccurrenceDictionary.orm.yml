@@ -13,6 +13,10 @@ AppBundle\Entity\OccurrenceDictionary:
             type: string
             column: dictionary_code
             nullable: false
+        dictionaryId:
+            type: string
+            column: dictionary_id
+            nullable: false
     oneToMany:
         occurrences:
             targetEntity: Occurrence

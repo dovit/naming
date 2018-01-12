@@ -5,16 +5,24 @@ namespace AppBundle\Services;
 use AppBundle\Entity\Occurrence;
 use AppBundle\Entity\OccurrenceDictionary;
 use AppBundle\Entity\Word;
+use AppBundle\Repository\OccurrenceRepository;
 use Doctrine\Common\Collections\Criteria;
 
 class Naming
 {
+    private $occurrenceRepository;
+
+    public function __construct(occurrenceRepository $repository)
+    {
+        $this->occurrenceRepository = $repository;
+    }
+
     /**
      * @param OccurrenceDictionary $occurrenceDictionary
      * @param Word $word
-     * @return bool
+     * @return OccurrenceDictionary
      */
-    public function processWord(OccurrenceDictionary $occurrenceDictionary, Word $word): bool
+    public function processWord(OccurrenceDictionary $occurrenceDictionary, Word $word): OccurrenceDictionary
     {
         $cnt = 0;
 
@@ -22,7 +30,7 @@ class Naming
         if ($occurrenceDictionary->getWords()->exists(function ($key, $element) use ($word) {
             return $word->getWord() === $element->getWord();} ))
         {
-            return true;
+            return $occurrenceDictionary;
         }
 
         $wordArray = str_split($word->getWord());
@@ -48,12 +56,67 @@ class Naming
             }
             $cnt++;
         }
+        $word->setDictionary($occurrenceDictionary);
         $occurrenceDictionary->getWords()->add($word);
-        return true;
+        return $occurrenceDictionary;
     }
 
+    /**
+     * Delete a word in occurrence
+     */
     public function deleteWord()
     {
 
+    }
+
+    /**
+     * Choose next letter
+     *
+     * @param OccurrenceDictionary $occurrenceDictionary
+     * @param $letter
+     * @return string
+     */
+    public function getLetter(OccurrenceDictionary $occurrenceDictionary, $letter)
+    {
+        $choose = '';
+
+        $occurrences = $this->occurrenceRepository->fetchTopOccurrenceByDictionaryAndLetter(
+            $occurrenceDictionary,
+            \IntlChar::ord($letter),
+            5);
+
+        $key = random_int(0, 4);
+        if (isset($occurrences[$key]))
+        {
+            return \IntlChar::chr($occurrences[$key]->getNextLetter());
+        }
+
+        if ($choose === '') {
+            return chr(random_int(65,90));
+        }
+        return $choose;
+    }
+
+    /**
+     * Generate a word
+     *
+     * @param OccurrenceDictionary $occurrenceDictionary
+     * @param int $lenMinimum
+     * @param int $lenMaximum
+     * @return string
+     */
+    public function getWord(OccurrenceDictionary $occurrenceDictionary, int $lenMinimum = 3, int $lenMaximum = 255)
+    {
+        $len = random_int($lenMinimum, $lenMaximum);
+        $word = '';
+        $letter = chr(random_int(65,90));
+
+        while (--$len)
+        {
+            $nextLetter = $this->getLetter($occurrenceDictionary, $letter);
+            $word .= $nextLetter;
+            $letter = $nextLetter;
+        }
+        return $word;
     }
 }

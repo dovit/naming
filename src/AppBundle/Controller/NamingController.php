@@ -44,7 +44,10 @@ class NamingController extends FOSRestController
      *
      * @View()
      *
-     * @Route("/naming/occurrences/{id}", requirements={"id": "[a-zA-Z0-9-]+"}, name="naming_get_table_occurrence")
+     * @Route("/naming/occurrences/{id}",
+     *     requirements={"id": "[a-zA-Z0-9-]+"},
+     *     name="naming_get_table_occurrence"
+     * )
      *
      * @Method({"GET"})
      */
@@ -164,23 +167,77 @@ class NamingController extends FOSRestController
     /**
      * @SWG\Post(
      *     description="Create new occurrence",
-     *     path="/naming/occurrences/",
+     *     path="/naming/occurrence/",
      *     tags={"occurrence"},
+     *     @SWG\Response(
+     *          response="200",
+     *          description="Test"
+     *      ),
+     *     @SWG\Parameter(
+     *      in="body",
+     *      type="string",
+     *      name="OccurrenceDictionary",
+     *      required=true,
+     *      @SWG\Schema(
+     *         ref="#/definitions/OccurrenceDictionary"
+     *      )
+     *     )
+     * )
+     *
+     * @View()
+     *
+     * @Route("/naming/occurrence/", name="naming_create_occurrence")
+     *
+     * @Method({"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function createOccurrenceAction(Request $request)
+    {
+        $occurrenceDictionary = new OccurrenceDictionary();
+        $occurrenceDictionary->setDictionaryCode($request->get('dictionary_code'));
+
+        $serviceDictionary = $this->get('dictionary');
+        $dictionary = $serviceDictionary->createDictionary($request->get('dictionary_code'));
+
+        $dictionary = json_decode($dictionary, true);
+        $occurrenceDictionary->setDictionaryId($dictionary['id']);
+
+        $this->getDoctrine()->getManager()->persist($occurrenceDictionary);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->handleView($this->view($occurrenceDictionary, Response::HTTP_OK));
+    }
+
+    /**
+     * @SWG\Get(
+     *     description="Generate a word",
+     *     path="/naming/occurrences/{occurrence_id}/",
+     *     tags={"naming"},
+     *     @SWG\Parameter(
+     *      in="path",
+     *      type="string",
+     *      name="occurrence_id",
+     *      required=true
+     *     ),
      *     @SWG\Response(
      *          response="200",
      *          description="Test"
      *      )
      * )
      *
-     * @View()
-     *
-     * @Route("/naming/occurrences/"
-     *          , name="naming_create_occurrence")
-     *
-     * @Method({"POST"})
+     * @Route("/naming/occurrences/{occurence_id}/", name="naming_create_word")
      */
-    public function createOccurrenceAction()
+    public function createWordAction($occurence_id)
     {
+        $service = $this->get('naming');
 
+        $result = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:OccurrenceDictionary')
+            ->findOneById($occurence_id);
+
+        $result = $service->getWord($result);
+        return $this->handleView($this->view($result, Response::HTTP_OK));
     }
 }

@@ -1,5 +1,24 @@
 services:
     naming:
         class: AppBundle\Services\Naming
+        arguments: ['@naming.occurrence_repository']
+
     naming.consumer.word_created:
         class: AppBundle\AMQP\Consumer\WordCreatedConsumer
+        arguments: ['@naming', '@doctrine']
+
+    naming.consumer.dictionary_loaded:
+        class: AppBundle\AMQP\Consumer\DictionaryLoadedConsumer
+        arguments: ['@dictionary', '@naming', '@doctrine']
+
+    naming.occurrence_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\Occurrence
+
+    naming.occurrence_dictionary_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - AppBundle\Entity\OccurrenceDictionary

@@ -103,7 +103,7 @@ guzzle:
     logging: true
     clients:
         api_dictionary:
-            base_url: "http://dictionary-webserver:8080/app_dev.php/"
+            base_url: "http://dictionary-webserver:8080/app_dev.php/api/"
             headers:
                 Accept: "application/json"
 
@@ -126,6 +126,16 @@ old_sound_rabbit_mq:
                 routing_keys:
                   - 'dictionary.word_created'
             callback: naming.consumer.word_created
+        dictionary_loaded:
+            connection: default
+            exchange_options:
+                name: 'dictionary-exchange'
+                type: fanout
+            queue_options:
+                name: 'naming-dictionary-loaded'
+                routing_keys:
+                  - 'dictionary.dictionary-loaded'
+            callback: naming.consumer.dictionary_loaded
 
 dvc_dictionary_consumer:
     authorization:

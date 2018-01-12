@@ -14,14 +14,7 @@ use Swagger\Annotations as SWG;
  *     type="object",
  *     @SWG\Property(property="word", example="Mot")
  * )
- *
- *
  */
 class Word extends \Dvc\DictionaryConsumerBundle\Entity\Word
 {
-    public function __construct($dictionary, $word)
-    {
-        $this->dictionary = $dictionary;
-        $this->word = $word;
-    }
 }
